@@ -105,8 +105,10 @@ function isInArray(n, array){
 function nextAssignment (currentAssignment) {
     var testados = []
     let arrayTeste = currentAssignment
+    stop = new Array(quantV)
     arrayFinal = new Array(quantV)
     testados = new Array(quantV)
+    var quantV = currentAssignment.length
     for(var i = 0; i < quantV; i++){
     	if(i == (quantV - 1)){
     		testados[i] = 1
@@ -123,4 +125,15 @@ function nextAssignment (currentAssignment) {
     		arrayTeste[(e-1)] = arrayTeste[(e - 1)] + 1
     	}
     }
+    for(var i = 0; i < quantV; i++){
+    	stop[i] = 0
+    }
+    if(arrayFinal == stop){
+    	return null
+    }
+    return arrayFinal
+
+}
+function doSolve(currentAssignment, clauses){
+
 }
