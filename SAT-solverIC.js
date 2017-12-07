@@ -197,9 +197,10 @@ function doSolve (clauses, assignment) {
       	}
       }
       var arrayz = new Array(clauses.length)
+      var boolean = false
     for(var i = 0; i < clauses.length; i++){
         for(var e = 0; e < clauses[i].length; e++){
-      boolean = false || clauses[i][e]
+      boolean = boolean || clauses[i][e]
           }
           arrayz[i] = boolean 
         }
@@ -208,7 +209,6 @@ function doSolve (clauses, assignment) {
     for(var i = 0; i < clauses.length; i++){
     	resposta = resposta && arrayz[i] 
     }
-    console.log("entrou")
     if(resposta){
     	isSat = true
     } else {
