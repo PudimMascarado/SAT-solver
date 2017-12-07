@@ -1,18 +1,13 @@
 fs = require('fs')
-var fileName = "hole1.cnf"
+var fileName = "hole2.cnf"
 // como ele manda ler o nome de um arquivo, mudei a sintaxe pra ele ler o nome só
-solve(fileName)
-exports.solve = function(fileName) {
-  let formula = propsat.readFormula(fileName)
-  let result = doSolve(formula.clauses, formula.variables)
-  return result
-}
+console.log(solve(fileName))
+
 function solve(fileName){
-  var text = readFormula(fileName)
-  var clauses = readClauses(text)
-  var assignment = readVariables(clauses)
-  return doSolve(clauses, assignment)
+  var text = readFormula(fileName);
+  return doSolve(text.clauses, text.assignment);
 }
+
 function readClauses(text){
    arrayC = []
    clauses = []
@@ -81,8 +76,7 @@ function readClauses(text){
           }
         }
       
-    }
-       console.log(arrayC)
+    } return arrayC
   }
   function readVariables(clauses){
     var vars = []
@@ -178,23 +172,24 @@ function nextAssignment (currentAssignment) {
 
 function doSolve (clauses, assignment) {
   let isSat = false
-  while((!isSat) || assignment != null){
+  while((!isSat) && assignment != null){
+    console.log(assignment)
     for(var i = 0; i < clauses.length; i++){
       for(var e = 0; e < clauses[i].length; e++){
-      	var booleana = assignment[(Math.abs(parseInt(clauses[i][e])) - 1)]
-      	if(booleana == 0){
-      		if(parseInt(clauses[i][e]) > 0){
-      			clauses[i][e] = false
-      		} else {
-      			clauses[i][e] = true
-      		}
-      	} else {
-      		if(parseInt(clauses[i][e]) < 0){
-      			clauses[i][e] = false
-      		} else {
-      			clauses[i][e] = true
-      		}
-      	}
+        var booleana = assignment[(Math.abs(parseInt(clauses[i][e])) - 1)]
+        if(booleana == 0){
+          if(parseInt(clauses[i][e]) > 0){
+            clauses[i][e] = false
+          } else {
+            clauses[i][e] = true
+          }
+        } else {
+          if(parseInt(clauses[i][e]) < 0){
+            clauses[i][e] = false
+          } else {
+            clauses[i][e] = true
+          }
+        }
       }
       var arrayz = new Array(clauses.length)
       var boolean = false
@@ -207,10 +202,10 @@ function doSolve (clauses, assignment) {
     }
     var resposta = true
     for(var i = 0; i < clauses.length; i++){
-    	resposta = resposta && arrayz[i] 
+      resposta = resposta && arrayz[i] 
     }
     if(resposta){
-    	isSat = true
+      isSat = true
     } else {
       assignment = nextAssignment(assignment)
     }
