@@ -1,6 +1,7 @@
 fs = require('fs')
 var fileName = "hole1.cnf"
 // como ele manda ler o nome de um arquivo, mudei a sintaxe pra ele ler o nome só
+solve(fileName)
 exports.solve = function(fileName) {
   let formula = propsat.readFormula(fileName)
   let result = doSolve(formula.clauses, formula.variables)
@@ -15,6 +16,7 @@ function solve(fileName){
 function readClauses(text){
    arrayC = []
    clauses = []
+   numeros = ["1","2","3","4","5","6","7","8","9","0"]
    var act = ""
    for(var i = 0; i < text.length; i++){
       if(text[i][0] != 'c' && text[i][0] != 'p' && text[i] !== null){
@@ -80,11 +82,8 @@ function readClauses(text){
         }
       
     }
-       return arrayC
+       console.log(arrayC)
   }
-
-
-
   function readVariables(clauses){
     var vars = []
     for(i = 0; i < clauses.length; i++){
