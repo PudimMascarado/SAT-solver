@@ -1,11 +1,11 @@
 fs = require('fs')
-var fileName = "hole2.cnf"
+var fileName = "hole4.cnf"
 // como ele manda ler o nome de um arquivo, mudei a sintaxe pra ele ler o nome só
 console.log(solve(fileName))
-
+//console.log(doSolve(readFormula(fileName).clauses, [0,0,0,0,1]))
 function solve(fileName){
   var text = readFormula(fileName);
-  return doSolve(text.clauses, text.assignment);
+  return doSolve(text.clauses, text.variables);
 }
 
 function readClauses(text){
@@ -169,40 +169,51 @@ function nextAssignment (currentAssignment) {
     }
     return arrayFinal
 }
-
+var arrayClausulas = []
 function doSolve (clauses, assignment) {
   let isSat = false
   while((!isSat) && assignment != null){
-    console.log(assignment)
-    for(var i = 0; i < clauses.length; i++){
-      for(var e = 0; e < clauses[i].length; e++){
-        var booleana = assignment[(Math.abs(parseInt(clauses[i][e])) - 1)]
-        if(booleana == 0){
-          if(parseInt(clauses[i][e]) > 0){
-            clauses[i][e] = false
+    console.log("clauses:" + clauses)
+    console.log("assignment:" + assignment)
+    arrayClausulas = readClauses(text) 
+    console.log(arrayClausulas)
+    for(var i = 0; i < arrayClausulas.length; i++){
+      for(var e = 0; e < arrayClausulas[i].length; e++){
+        var booleana = assignment[(Math.abs(parseInt(arrayClausulas[i][e])) - 1)]
+        console.log(arrayClausulas[i][e])
+        console.log("booleana:" + booleana)
+        console.log("assignment:" + assignment)
+        if(booleana == 0){ 
+          if(parseInt(arrayClausulas[i][e]) > 0){
+            arrayClausulas[i][e] = false
           } else {
-            clauses[i][e] = true
+            arrayClausulas[i][e] = true
           }
         } else {
-          if(parseInt(clauses[i][e]) < 0){
-            clauses[i][e] = false
+          if(parseInt(arrayClausulas[i][e]) < 0){
+            arrayClausulas[i][e] = false
           } else {
-            clauses[i][e] = true
+            arrayClausulas[i][e] = true
           }
         }
       }
-      var arrayz = new Array(clauses.length)
-      var boolean = false
-    for(var i = 0; i < clauses.length; i++){
-        for(var e = 0; e < clauses[i].length; e++){
-      boolean = boolean || clauses[i][e]
-          }
-          arrayz[i] = boolean 
-        }
     }
+    // console.log("clauses: " + arrayClausulas)
+      var arrayz = new Array(arrayClausulas.length)
+      var boolean = false
+    for(var z = 0; z < arrayClausulas.length; z++){
+      boolean = false
+        for(var c = 0; c < arrayClausulas[z].length; c++){
+      boolean = boolean || arrayClausulas[z][c]
+     // console.log("boolean:" + boolean)
+     // console.log("clauses[z][c]:" + arrayClausulas[z][c]+ "\n\n")
+          }
+          arrayz[z] = boolean 
+        }
+    
     var resposta = true
-    for(var i = 0; i < clauses.length; i++){
-      resposta = resposta && arrayz[i] 
+    for(var f = 0; f < arrayClausulas.length; f++){
+      resposta = resposta && arrayz[f]
     }
     if(resposta){
       isSat = true
