@@ -173,16 +173,16 @@ var arrayClausulas = []
 function doSolve (clauses, assignment) {
   let isSat = false
   while((!isSat) && assignment != null){
-    console.log("clauses:" + clauses)
-    console.log("assignment:" + assignment)
+    //console.log("clauses:" + clauses)
+    //console.log("assignment:" + assignment)
     arrayClausulas = readClauses(text) 
-    console.log(arrayClausulas)
+    //console.log(arrayClausulas)
     for(var i = 0; i < arrayClausulas.length; i++){
       for(var e = 0; e < arrayClausulas[i].length; e++){
         var booleana = assignment[(Math.abs(parseInt(arrayClausulas[i][e])) - 1)]
-        console.log(arrayClausulas[i][e])
-        console.log("booleana:" + booleana)
-        console.log("assignment:" + assignment)
+        //console.log(arrayClausulas[i][e])
+        //console.log("booleana:" + booleana)
+        //console.log("assignment:" + assignment)
         if(booleana == 0){ 
           if(parseInt(arrayClausulas[i][e]) > 0){
             arrayClausulas[i][e] = false
