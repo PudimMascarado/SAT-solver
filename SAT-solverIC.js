@@ -6,7 +6,17 @@ exports.solve = function(fileName) {
   let result = doSolve(formula.clauses, formula.variables)
   return result
 }
-for(var i = 0; i < text.length; i++){
+function solve(fileName){
+  var text = readFormula(fileName)
+  var clauses = readClauses(text)
+  var assignment = readVariables(clauses)
+  return doSolve(clauses, assignment)
+}
+function readClauses(text){
+   arrayC = []
+   clauses = []
+   var act = ""
+   for(var i = 0; i < text.length; i++){
       if(text[i][0] != 'c' && text[i][0] != 'p' && text[i] !== null){
         if(text[i].endsWith(0)){
           for(var e = 0; e < (text[i].length)-1; e++){
@@ -199,6 +209,7 @@ function doSolve (clauses, assignment) {
     for(var i = 0; i < clauses.length; i++){
     	resposta = resposta && arrayz[i] 
     }
+    console.log("entrou")
     if(resposta){
     	isSat = true
     } else {
