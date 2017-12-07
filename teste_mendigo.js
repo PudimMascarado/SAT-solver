@@ -1,49 +1,77 @@
 fs = require('fs')
 var fileName = "hole1.cnf"
 // como ele manda ler o nome de um arquivo, mudei a sintaxe pra ele ler o nome só
-
-function readClauses(text){
-   arrayC = []
-   // arrayC é o array de arrays, clauses é um array que é modificado
-   clauses = []
-   var act = ""
-   for(var i = 0; i < problema.length; i++){
-       if(problema[i][0] != 'c' && problema[i][0] != 'p' && problema[i] !== null){
-           if(problema[i].endsWith(0)){
-             for(var e = 0; e < (problema[i].length)-1; e++){
-               if(problema[i][e] !== " "){
-                 if(problema[i][e] == "-"){
-                   act += problema[i][e]
-                 }
-                 else{
-                   act += problema[i][e]
-                   clauses.push(act)
-                   act = ""
-                 }
-               }
-             }
-             arrayC.push(clauses)
-             var clauses = []
-           }
-           else{
-             for(var e = 0; e < (problema[i].length); e++){
-               if(problema[i][e] !== " "){
-                 if(problema[i][e] == "-"){
-                   act += problema[i][e]
-                 }
-                 else{
-                   act += problema[i][e]
-                   clauses.push(act)
-                   act = ""
-                 }
-               }
-             }
-           }
-
-       }
-       }
+exports.solve = function(fileName) {
+  let formula = propsat.readFormula(fileName)
+  let result = doSolve(formula.clauses, formula.variables)
+  return result
+}
+for(var i = 0; i < text.length; i++){
+      if(text[i][0] != 'c' && text[i][0] != 'p' && text[i] !== null){
+        if(text[i].endsWith(0)){
+          for(var e = 0; e < (text[i].length)-1; e++){
+            if(text[i][e] !== " "){
+              if(text[i][e] == "-"){
+                act += text[i][e]
+              }
+              else{
+                if(isInArray(text[i][e+1],numeros)){
+                  if((e+1) < (text[i].length)-1){
+                    act += text[i][e]            
+                  }
+                  else{
+                    act += text[i][e]                
+                    clauses.push(act)
+                    act = ""
+                  }    
+                }
+                else{
+                  
+                  act += text[i][e]                
+                  clauses.push(act)
+                  act = ""
+                  }
+                }
+              }
+            }
+            arrayC.push(clauses)
+            var clauses = []
+          }
+        else{
+          if(!text[i].endsWith(".")){
+          text[i] += "."
+          }
+          for(var e = 0; e < (text[i].length-1); e++){
+            if(text[i][e] !== " "){
+              if(text[i][e] == "-"){
+                act += text[i][e]
+              }
+              else{
+                if(isInArray(text[i][e+1],numeros)){
+                  if((e+1) < (text[i].length)-1){
+                    act += text[i][e]            
+                  }
+                  else{
+                    act += text[i][e]                
+                    clauses.push(act)
+                    act = ""
+                  }    
+                }
+                else{
+                  
+                  act += text[i][e]                
+                  clauses.push(act)
+                  act = ""
+                  }
+                }
+              }
+            }
+          }
+        }
+      
+    }
        return arrayC
-   }
+  }
 
 
 
@@ -89,12 +117,11 @@ function readFormula(fileName) {
         result.clauses = clauses
         result.variables = variables
     }
-    console.log(result)
     return result;
     
   }
 
-function isInArray(n, array){
+  function isInArray(n, array){
     for(k = 0; k < array.length; k++){
       if(array[k] === n){
         return true;
@@ -105,35 +132,82 @@ function isInArray(n, array){
 function nextAssignment (currentAssignment) {
     var testados = []
     let arrayTeste = currentAssignment
+    var b = true
     stop = new Array(quantV)
     arrayFinal = new Array(quantV)
     testados = new Array(quantV)
     var quantV = currentAssignment.length
     for(var i = 0; i < quantV; i++){
-    	if(i == (quantV - 1)){
-    		testados[i] = 1
-    	} else {
-    		testados[i] = 0
-    	}
+        if(i == (quantV - 1)){
+            testados[i] = 1
+        } else {
+            testados[i] = 0
+        }
     }
-    for(var e = (quantV - 1); e != 0; e--){
-    	arrayFinal[e] = arrayTeste[e] + testados[e]
-    	if(arrayFinal[0] > 1){
-    		arrayFinal[0] = 0
-    	} else if(arrayFinal[e] == 2){
-    		arrayFinal[e] = 0
-    		arrayTeste[(e-1)] = arrayTeste[(e - 1)] + 1
-    	}
+    for(var e = (quantV - 1); e >= 0; e--){
+        arrayFinal[e] = arrayTeste[e] + testados[e]
+        if(arrayFinal[0] > 1){
+            arrayFinal[0] = 0
+        } else if(arrayFinal[e] == 2){
+            arrayFinal[e] = 0
+            arrayTeste[(e-1)] = arrayTeste[(e - 1)] + 1
+        }
     }
     for(var i = 0; i < quantV; i++){
-    	stop[i] = 0
+        stop[i] = 0
     }
-    if(arrayFinal == stop){
-    	return null
+    for(var k = 0; k < quantV; k++){
+        if(arrayFinal[k] != stop[k]){
+            b = false
+        }
+    }
+    if(b){
+        return null
     }
     return arrayFinal
-
 }
-function doSolve(currentAssignment, clauses){
 
+function doSolve (clauses, assignment) {
+  let isSat = false
+  while((!isSat) || assignment != null){
+    for(var i = 0; i < clauses.length; i++){
+      for(var e = 0; e < clauses[i].length; e++){
+      	var booleana = assignment[(Math.abs(parseInt(clauses[i][e])) - 1)]
+      	if(booleana == 0){
+      		if(parseInt(clauses[i][e]) > 0){
+      			clauses[i][e] = false
+      		} else {
+      			clauses[i][e] = true
+      		}
+      	} else {
+      		if(parseInt(clauses[i][e]) < 0){
+      			clauses[i][e] = false
+      		} else {
+      			clauses[i][e] = true
+      		}
+      	}
+      }
+      var arrayz = new Array(clauses.length)
+    for(var i = 0; i < clauses.length; i++){
+        for(var e = 0; e < clauses[i].length; e++){
+      boolean = false || clauses[i][e]
+          }
+          arrayz[i] = boolean 
+        }
+    }
+    var resposta = true
+    for(var i = 0; i < clauses.length; i++){
+    	resposta = resposta && arrayz[i] 
+    }
+    if(resposta){
+    	isSat = true
+    } else {
+      assignment = nextAssignment(assignment)
+    }
+  }
+  let result = {'isSat': isSat, satisfyingAssignment: null}
+  if (isSat) {
+    result.satisfyingAssignment = assignment
+  }
+  return result
 }
